@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <rect width="512" height="512" rx="112" fill="#F97316"/>
+  <rect x="40" y="40" width="432" height="432" rx="88" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="6"/>
+  <!-- Stylized Bowl + Steam + Receipt Line -->
+  <path d="M132 252C132 243.163 139.163 236 148 236H364C372.837 236 380 243.163 380 252V264C380 328.065 328.065 380 264 380H248C183.935 380 132 328.065 132 264V252Z" fill="#FFFFFF"/>
+  <rect x="196" y="392" width="120" height="24" rx="12" fill="#FFFFFF" fill-opacity="0.92"/>
+  <path d="M196 196C196 174 212 162 212 140" stroke="#FFFFFF" stroke-width="20" stroke-linecap="round"/>
+  <path d="M256 196C256 168 272 156 272 128" stroke="#FFFFFF" stroke-width="20" stroke-linecap="round"/>
+  <path d="M316 196C316 174 332 162 332 140" stroke="#FFFFFF" stroke-width="20" stroke-linecap="round"/>
+</svg>

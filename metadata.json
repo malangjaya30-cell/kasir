@@ -1,0 +1,6 @@
+{
+  "name": "SajiPOS — Kasir & Laporan Kuliner",
+  "description": "Aplikasi kasir (Point of Sale) PWA offline-first dan laporan penjualan lengkap untuk usaha kuliner Indonesia.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

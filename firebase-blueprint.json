@@ -1,0 +1,298 @@
+{
+  "entities": {
+    "Outlet": {
+      "title": "Outlet",
+      "description": "Profil dan pengaturan utama outlet kuliner.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "address": { "type": "string", "maxLength": 300 },
+        "phone": { "type": "string", "maxLength": 32 },
+        "npwp": { "type": "string", "maxLength": 40 },
+        "operatingHours": { "type": "string", "maxLength": 100 },
+        "logoUrl": { "type": "string", "maxLength": 500 },
+        "taxPercent": { "type": "number" },
+        "serviceChargePercent": { "type": "number" },
+        "receiptHeader": { "type": "string", "maxLength": 250 },
+        "receiptFooter": { "type": "string", "maxLength": 250 },
+        "qrisImageUrl": { "type": "string", "maxLength": 200000 },
+        "qrisMerchantName": { "type": "string", "maxLength": 100 },
+        "timezone": { "type": "string", "maxLength": 40 },
+        "currency": { "type": "string", "maxLength": 10 },
+        "ownerUid": { "type": "string", "maxLength": 128 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "taxPercent", "serviceChargePercent", "timezone", "currency", "ownerUid", "updatedAt"]
+    },
+    "UserAccount": {
+      "title": "UserAccount",
+      "description": "Akun pengguna terautentikasi (mengandung email PII, terisolasi per UID).",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "outletId": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "email": { "type": "string", "maxLength": 200 },
+        "role": { "type": "string", "enum": ["owner", "manager", "cashier"] },
+        "isActive": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "outletId", "name", "email", "role", "isActive", "createdAt", "updatedAt"]
+    },
+    "StaffProfile": {
+      "title": "StaffProfile",
+      "description": "Daftar operator kasir/manajer/owner untuk layar PIN cepat tanpa PII.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "outletId": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "role": { "type": "string", "enum": ["owner", "manager", "cashier"] },
+        "pinHash": { "type": "string", "minLength": 16, "maxLength": 128 },
+        "authUid": { "type": "string", "maxLength": 128 },
+        "isActive": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "outletId", "name", "role", "pinHash", "isActive", "createdAt", "updatedAt"]
+    },
+    "Category": {
+      "title": "Category",
+      "description": "Kategori menu makanan dan minuman.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "outletId": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "sortOrder": { "type": "number" },
+        "isActive": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "outletId", "name", "sortOrder", "isActive", "createdAt", "updatedAt"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Item menu yang dijual di POS.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "outletId": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "categoryId": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "sku": { "type": "string", "maxLength": 40 },
+        "price": { "type": "number" },
+        "costPrice": { "type": "number" },
+        "imageUrl": { "type": "string", "maxLength": 200000 },
+        "modifierGroupIds": { "type": "array" },
+        "isAvailable": { "type": "boolean" },
+        "isActive": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "outletId", "categoryId", "name", "price", "modifierGroupIds", "isAvailable", "isActive", "createdAt", "updatedAt"]
+    },
+    "ModifierGroup": {
+      "title": "ModifierGroup",
+      "description": "Grup varian/tambahan menu (mis. Level Pedas, Topping).",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "outletId": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "isRequired": { "type": "boolean" },
+        "minSelect": { "type": "number" },
+        "maxSelect": { "type": "number" },
+        "options": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "outletId", "name", "isRequired", "minSelect", "maxSelect", "options", "createdAt", "updatedAt"]
+    },
+    "Discount": {
+      "title": "Discount",
+      "description": "Aturan promo diskon nominal atau persentase.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "outletId": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "type": { "type": "string", "enum": ["percent", "nominal"] },
+        "value": { "type": "number" },
+        "isActive": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "outletId", "name", "type", "value", "isActive", "createdAt", "updatedAt"]
+    },
+    "Shift": {
+      "title": "Shift",
+      "description": "Catatan buka dan tutup shift kasir beserta rekonsiliasi kas.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "outletId": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userId": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "staffId": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "staffName": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "openedAt": { "type": "string", "format": "date-time" },
+        "closedAt": { "type": "string", "format": "date-time" },
+        "openingCash": { "type": "number" },
+        "cashSalesTotal": { "type": "number" },
+        "expensesTotal": { "type": "number" },
+        "expectedCash": { "type": "number" },
+        "actualCash": { "type": "number" },
+        "cashDifference": { "type": "number" },
+        "status": { "type": "string", "enum": ["open", "closed"] },
+        "note": { "type": "string", "maxLength": 300 },
+        "authorizedViewerIds": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "outletId", "userId", "staffId", "staffName", "openedAt", "openingCash", "status", "authorizedViewerIds", "createdAt", "updatedAt"]
+    },
+    "Expense": {
+      "title": "Expense",
+      "description": "Catatan kas keluar selama shift berjalan.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "outletId": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "shiftId": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userId": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "staffName": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "description": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "amount": { "type": "number" },
+        "authorizedViewerIds": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "outletId", "shiftId", "userId", "staffName", "description", "amount", "authorizedViewerIds", "createdAt"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Transaksi pesanan POS dengan snapshot item, modifier, dan pembayaran.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "orderNumber": { "type": "string", "minLength": 1, "maxLength": 40 },
+        "queueNumber": { "type": "number" },
+        "outletId": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "shiftId": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userId": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "staffId": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "staffName": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "orderType": { "type": "string", "enum": ["dine_in", "takeaway", "delivery"] },
+        "tableOrCustomer": { "type": "string", "maxLength": 80 },
+        "status": { "type": "string", "enum": ["hold", "new", "preparing", "ready", "completed", "cancelled", "void"] },
+        "items": { "type": "array" },
+        "subtotal": { "type": "number" },
+        "discountId": { "type": "string", "maxLength": 64 },
+        "discountName": { "type": "string", "maxLength": 80 },
+        "discountAmount": { "type": "number" },
+        "taxPercent": { "type": "number" },
+        "taxAmount": { "type": "number" },
+        "servicePercent": { "type": "number" },
+        "serviceAmount": { "type": "number" },
+        "total": { "type": "number" },
+        "paidAmount": { "type": "number" },
+        "changeAmount": { "type": "number" },
+        "payments": { "type": "array" },
+        "note": { "type": "string", "maxLength": 300 },
+        "voidReason": { "type": "string", "maxLength": 300 },
+        "voidBy": { "type": "string", "maxLength": 100 },
+        "authorizedViewerIds": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "completedAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "orderNumber", "queueNumber", "outletId", "shiftId", "userId", "staffId", "staffName", "orderType", "status", "items", "subtotal", "discountAmount", "taxAmount", "serviceAmount", "total", "paidAmount", "changeAmount", "payments", "authorizedViewerIds", "createdAt", "updatedAt"]
+    },
+    "DailyStat": {
+      "title": "DailyStat",
+      "description": "Agregat harian ringkasan omzet dan jumlah transaksi.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 20, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "outletId": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "date": { "type": "string", "maxLength": 20 },
+        "revenue": { "type": "number" },
+        "orderCount": { "type": "number" },
+        "voidCount": { "type": "number" },
+        "authorizedViewerIds": { "type": "array" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "outletId", "date", "revenue", "orderCount", "voidCount", "authorizedViewerIds", "updatedAt"]
+    },
+    "AuditLog": {
+      "title": "AuditLog",
+      "description": "Log aktivitas sensitif seperti void, ubah harga, dan shift.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "outletId": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userId": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "staffId": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "staffName": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "action": { "type": "string", "minLength": 1, "maxLength": 60 },
+        "entity": { "type": "string", "minLength": 1, "maxLength": 60 },
+        "entityId": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "detail": { "type": "string", "minLength": 1, "maxLength": 400 },
+        "authorizedViewerIds": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "outletId", "userId", "staffId", "staffName", "action", "entity", "entityId", "detail", "authorizedViewerIds", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/outlet/{outletId}": {
+      "schema": { "$ref": "#/entities/Outlet" },
+      "description": "Dokumen konfigurasi tunggal outlet."
+    },
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserAccount" },
+      "description": "Profil akun pengguna dengan email terisolasi."
+    },
+    "/staff/{staffId}": {
+      "schema": { "$ref": "#/entities/StaffProfile" },
+      "description": "Daftar operator staf tanpa PII untuk login PIN cepat."
+    },
+    "/categories/{categoryId}": {
+      "schema": { "$ref": "#/entities/Category" },
+      "description": "Daftar kategori menu."
+    },
+    "/products/{productId}": {
+      "schema": { "$ref": "#/entities/Product" },
+      "description": "Daftar produk menu kuliner."
+    },
+    "/modifierGroups/{groupId}": {
+      "schema": { "$ref": "#/entities/ModifierGroup" },
+      "description": "Grup varian dan tambahan menu."
+    },
+    "/discounts/{discountId}": {
+      "schema": { "$ref": "#/entities/Discount" },
+      "description": "Daftar diskon dan promo aktif."
+    },
+    "/shifts/{shiftId}": {
+      "schema": { "$ref": "#/entities/Shift" },
+      "description": "Data buka dan tutup shift kasir."
+    },
+    "/expenses/{expenseId}": {
+      "schema": { "$ref": "#/entities/Expense" },
+      "description": "Pengeluaran kas kecil selama shift."
+    },
+    "/orders/{orderId}": {
+      "schema": { "$ref": "#/entities/Order" },
+      "description": "Pesanan dan transaksi POS."
+    },
+    "/dailyStats/{statId}": {
+      "schema": { "$ref": "#/entities/DailyStat" },
+      "description": "Ringkasan agregat penjualan harian."
+    },
+    "/auditLogs/{logId}": {
+      "schema": { "$ref": "#/entities/AuditLog" },
+      "description": "Catatan audit aksi penting."
+    }
+  }
+}
